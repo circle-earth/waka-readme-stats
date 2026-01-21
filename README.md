@@ -13,9 +13,6 @@
 
 <p align="center">
    <img src="https://img.shields.io/badge/language-python-blue?style"/>
-   <img src="https://img.shields.io/github/license/anmol098/waka-readme-stats"/>
-   <img src="https://img.shields.io/github/stars/anmol098/waka-readme-stats"/>
-   <img src="https://img.shields.io/github/forks/anmol098/waka-readme-stats"/>
    <img src="https://img.shields.io/static/v1?label=%F0%9F%8C%9F&message=If%20Useful&style=style=flat&color=BC4E99" alt="Star Badge"/>
 </p>
 
@@ -30,9 +27,9 @@
 </p>
 
 <p align="center">
-    <a href="https://github.com/anmol098/waka-readme-stats/issues">Report Bug</a>
+    <a href="https://github.com/circle-earth/waka-readme-stats/issues">Report Bug</a>
     ·
-    <a href="https://github.com/anmol098/waka-readme-stats/issues">Request Feature</a>
+    <a href="https://github.com/circle-earth/waka-readme-stats/issues">Request Feature</a>
   </p>
 
 ## Prep Work
@@ -96,7 +93,7 @@ jobs:
     name: Update Readme with Metrics
     runs-on: ubuntu-latest
     steps:
-      - uses: anmol098/waka-readme-stats@master
+      - uses: circle-earth/waka-readme-stats@master
         with:
           WAKATIME_API_KEY: ${{ secrets.WAKATIME_API_KEY }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -109,7 +106,7 @@ jobs:
 If you want to add the other info to your stats, you can add multiple `FLAGS` in your workflow file. By default all flags are enabled (except the lines of code flag due to the heavy operation performed)
 
 ```yml
-- uses: anmol098/waka-readme-stats@master
+- uses: circle-earth/waka-readme-stats@master
   with:
       WAKATIME_API_KEY: ${{ secrets.WAKATIME_API_KEY }}
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -208,7 +205,7 @@ denAPI                   40 mins             ██░░░░░░░░░�
 The `SHOW_TIMEZONE` flag can be set to `False` to hide the time zone you are in.
 
 ```text
-⌚︎ Timezone: Asia/Calcutta
+⌚︎ Timezone: Asia/Dhaka
 ```
 
 The `SHOW_EDITORS` flag can be set to `False` to hide the list of code editors/IDEs used.
@@ -284,200 +281,4 @@ The `BADGE_STYLE` flag defines the style for the generated badges and can be set
 
 ![Timeline Chart](https://raw.githubusercontent.com/anmol098/anmol098/master/charts/bar_graph.png)
 
-## :sparkling_heart: Support the project
-
-I open-source almost everything I can, and I try to reply to everyone needing help using these projects. Obviously,
-this takes time. You can use this service for free.
-
-However, if you are using this project and happy with it or just want to encourage me to continue creating stuff, there are few ways you can do it :-
-
-- Giving proper credit when you use this action on your readme, linking back to it :D
-- Starring and sharing the project :rocket:
-- [![paypal.me/aapreneur](https://ionicabizau.github.io/badges/paypal.svg)](https://www.paypal.me/aapreneur) - You can make one-time donations via PayPal. I'll probably buy some ~~beer~~ wine 🍷.
-
-Thanks! :heart:
-
----
-
-# Contributing
-
-Contributions are welcome ♥!
-
-Please share any features, and add unit tests! Use the pull request and issue systems to contribute.
-
-# Selected Contributors
-
-1. [Anmol Pratap Singh](https://github.com/anmol098): Maintainer
-2. [Alexander Sergeev](https://github.com/pseusys): Maintainer
-3. [DataBoySu](https://github.com/DataBoySu): Maintainer
-4. [okcoder1](https://github.com/ok-coder1): Maintainer
-5. [Aravind V. Nair](https://github.com/aravindvnair99): Maintainer
-6. [Prabhat Singh](https://github.com/prabhatdev): For code timeline graph [#18](https://github.com/anmol098/waka-readme-stats/pull/18)
-7. [Hedy Li](https://github.com/hedythedev): For Pull Request [#34](https://github.com/anmol098/waka-readme-stats/pull/34) and [#23](https://github.com/anmol098/waka-readme-stats/pull/23)
-8. [Pedro Torres](https://github.com/Corfucinas): For Pull Request [#29](https://github.com/anmol098/waka-readme-stats/pull/29)
-9. [Aaron Meese](https://github.com/ajmeese7): For Pull Request [#45](https://github.com/anmol098/waka-readme-stats/pull/45)
-10. [Arnav Jindal](https://github.com/Daggy1234): For Pull Request [#48](https://github.com/anmol098/waka-readme-stats/pull/48)
-11. [Daniel Rowe](https://github.com/DanRowe): For Pull Request [#57](https://github.com/anmol098/waka-readme-stats/pull/57)
-12. [Ss5h](https://github.com/tlatkdgus1): For adding support for natural sentence writing for translation [#136](https://github.com/anmol098/waka-readme-stats/pull/136)
-
-<details>
-
-<summary>Special mention for those who are currently making their profile readme more awesome :smile: :tada:</summary>
-
-- [Stanislas](https://github.com/angristan)
-  
-- [Pratik Kumar](https://github.com/pr2tik1)
-  
-- [Vladimir](https://github.com/sergeev-vn)
-
-- [Pedro Torres](https://github.com/Corfucinas)
-  
-- [leverglowh](https://github.com/leverglowh)
-  
-- [patdc](https://github.com/patdc)
-  
-- [极客挖掘机](https://github.com/meteor1993)
-  
-- [Fan()](https://github.com/Fanduzi)
-  
-- [Miller Camilo Vega](https://github.com/minoveaz)
-  
-- [XLor](https://github.com/yjl9903)
-  
-- [Jesse Okeya](https://github.com/jesseokeya)
-  
-- [anaiel](https://github.com/anaiel)
-  
-- [Dipto Mondal](https://github.com/diptomondal007)
-  
-- [Jerry F. Zhang](https://github.com/JerryFZhang)
-  
-- [Karan Singh](https://github.com/karan06126)
-  
-- [Erwin Lejeune](https://github.com/guilyx)
-  
-- [Manuel Cepeda](https://github.com/mecm1993)
-  
-- [Jonathan S](https://github.com/TGTGamer)
-  
-- [Tsotne Gvadzabia](https://github.com/RockiRider)
-  
-- [Miray](https://github.com/MirayXS)
-  
-- [Varad Patil](https://github.com/varadp2000)
-  
-- [Prabhat Singh](https://github.com/prabhatdev)
-  
-- [Nikhil](https://github.com/nikhilgorantla)
-  
-- [大白](https://github.com/2720851545)
-  
-- [Du Yizhuo](https://github.com/dyzdyz010)
-  
-- [Manas Talukdar](https://github.com/manastalukdar)
-  
-- [Simranjeet Singh](https://github.com/smrnjeet222)
-  
-- [Aaron Meese](https://github.com/ajmeese7)
-  
-- [Prasad Narkhede](https://github.com/p014ri5)
-  
-- [Manish Kushwaha](https://github.com/tzmanish)
-  
-- [Hedy Li](https://github.com/hedythedev)
-  
-- [SHIMIZU Taku](https://github.com/takuan-osho)
-  
-- [Jude Wilson](https://github.com/mr-winson)
-  
-- [Daniel Rowe](https://github.com/DanRowe)
-  
-- [Muhammad Hassan Ahmed](https://github.com/hassan11196)
-  
-- [Alessandro Maggio](https://github.com/Tkd-Alex)
-  
-- [Siddharth Gupta](https://github.com/siddg97)
-  
-- [Dev-Mehta](https://github.com/Dev-Mehta/)
-  
-- [> EdgyCoder ✌](https://github.com/edgycoder)
-  
-- [Korel Kashri](https://github.com/korelkashri)
-  
-- [Gustavo Barbosa](https://github.com/gusbdev)
-
-- [eagleanurag](https://github.com/eagleanurag)
-  
-- [Aravind V. Nair](https://github.com/aravindvnair99)
-  
-- [Raman Preet Singh](https://github.com/raman08)
-  
-- [Hayat Tamboli](https://github.com/hayat-tamboli)
-  
-- [Henry Boisdequin](https://github.com/henryboisdequin)
-
-- [Raman Preet Singh](https://github.com/raman08)
-  
-- [Aadit Kamat](https://github.com/aaditkamat)
-
-- [Subhalingam D](https://github.com/subhalingamd)
-  
-- [Adil Akhmetov](https://github.com/weeebdev)
-  
-- [Isaac Maldonado](https://github.com/einjunge99)
-  
-- [Syed Faateh Sultan Kazmi](https://github.com/faatehsultan)
-
-- [Shreyam Maity](https://github.com/ShreyamMaity)
-
-- [Sufiane](https://github.com/sufiane)
-
-- [Muhammad Bilal](https://github.com/BilalJaved15)
-
-- [Waterdev](https://github.com/UnrealValentin)
-  
-- [Aditya Prasad S](https://github.com/adityaprasad502)
-  
-- [C. Vinicius Santos](https://github.com/c-viniciussantos)
-  
-- [James Tufarelli](https://github.com/Minituff)
-  
-- [Muhammad Bilal](https://github.com/BilalJaved15)
-
-- [Wyatt Walsh](https://www.github.com/wyattowalsh)
-
-- [Nithin Balaji](https://github.com/thenithinbalaji)
-
-- [John Cortés](https://github.com/johncortes117)
-
-- [Taha Parker](https://github.com/tahayparker/)
-
-- [Yang An Yi](https://github.com/yanganyi)
-
-- [Mamdud Hasan](https://github.com/n8fury)
-
-- [Satyam Vyas](https://github.com/SatyamVyas04)
-
-- [Yash Naravade](https://github.com/yashnaravade)
-
-- [Luicen Loua](https://github.com/lucien-loua)
-
-- [DataBoySu](https://github.com/DataBoySu)
-
-</details>
-
-- And you! If ever you are using it right now and you are not on the list please tell us by sending a [Special Mention](https://github.com/anmol098/waka-readme-stats/issues/new/choose) issue! :blush: \
-  We will be glad to add you in the list.
-
 Made with :heart: and Python 🐍.
-
-# Inspired From
-
-> [Awesome Pinned Gists](https://github.com/matchai/awesome-pinned-gists) <br/>
-> [athul/waka-readme](https://github.com/athul/waka-readme)
-
-### This project needs a **star** ⭐ from you ♥
-
-## Stargazers over time
-
-[![Stargazers over time](https://starchart.cc/anmol098/waka-readme-stats.svg)](https://starchart.cc/anmol098/waka-readme-stats)
