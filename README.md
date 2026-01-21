@@ -1,15 +1,3 @@
-<!--START_SECTION:navbar-->
-<div align="center">
-  <a href="README.md">🇺🇸 English</a> | <a href="locales/README.de.md">🇩🇪 Deutsch</a> | <a href="locales/README.es.md">🇪🇸 Español</a> | <a href="locales/README.fr.md">🇫🇷 Français</a> | <a href="locales/README.hi.md">🇮🇳 हिंदी</a> | <a href="locales/README.ja.md">🇯🇵 日本語</a> | <a href="locales/README.ko.md">🇰🇷 한국어</a> | <a href="locales/README.pt.md">🇵🇹 Português</a> | <a href="locales/README.ru.md">🇷🇺 Русский</a> | <a href="locales/README.zh.md">🇨🇳 中文</a>
-</div>
-<!--END_SECTION:navbar-->
-
----
-> [!IMPORTANT]
-> We are looking for translators for this project. \
-> Any kind of help would be greatly appreciated. \
-> Please see issue <https://github.com/anmol098/waka-readme-stats/issues/23> if you would like to help!
-
 # Dev Metrics in README with added feature flags 🎌
 
 ![Project Preview](https://user-images.githubusercontent.com/25841814/79395484-5081ae80-7fac-11ea-9e27-ac91472e31dd.png)
