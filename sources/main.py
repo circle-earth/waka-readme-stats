@@ -90,7 +90,7 @@ async def get_short_github_info() -> str:
     :returns: String representation of the info.
     """
     DBM.i("Adding short GitHub info...")
-    stats = f"**🐱 {FM.t('My GitHub Data')}** \n\n"
+    stats = f"<div align=\"center\">\n\n**🐱 {FM.t('My GitHub Data')}** \n\n"
 
     DBM.i("Adding user disk usage info...")
     if GHM.USER.disk_usage is None:
@@ -103,7 +103,7 @@ async def get_short_github_info() -> str:
     data = await DM.get_remote_json("github_stats")
     if data is None:
         DBM.p("GitHub contributions data unavailable!")
-        return stats
+        return stats + "</div>\n\n"
 
     DBM.i("Adding contributions info...")
     if len(data["years"]) > 0:
@@ -136,6 +136,7 @@ async def get_short_github_info() -> str:
     else:
         stats += f"> 🔑 {FM.t('private repository') % private_repo} \n > \n"
 
+    stats += "</div>\n\n"
     DBM.g("Short GitHub info added!")
     return stats
 
@@ -197,55 +198,60 @@ async def get_stats() -> str:
         yearly_data, commit_data = dict(), dict()
         DBM.w("User yearly data not needed, skipped.")
 
-    if EM.SHOW_TOTAL_CODE_TIME:
-        DBM.i("Adding total code time info...")
-        data = await DM.get_remote_json("waka_all")
-        if data is None:
-            DBM.p("WakaTime data unavailable!")
-        else:
-            stats += f"![Code Time](http://img.shields.io/badge/{quote('Code Time')}-{quote(str(data['data']['text']))}-blue?style={quote(EM.BADGE_STYLE)})\n\n"
-
-    if EM.SHOW_PROFILE_VIEWS:
-        if EM.DEBUG_RUN or GHM.REMOTE is None:
-            DBM.w("Profile views skipped in DEBUG_RUN mode.")
-        else:
-            DBM.i("Adding profile views info...")
-            views_count = 0
-            try:
-                traffic = GHM.REMOTE.get_views_traffic(per="week")
-            except Exception as e:
-                DBM.w(f"Profile views unavailable, defaulting to 0: {e}")
+    if EM.SHOW_TOTAL_CODE_TIME or EM.SHOW_PROFILE_VIEWS or EM.SHOW_LINES_OF_CODE:
+        badges = ""
+        if EM.SHOW_TOTAL_CODE_TIME:
+            DBM.i("Adding total code time info...")
+            data = await DM.get_remote_json("waka_all")
+            if data is None:
+                DBM.p("WakaTime data unavailable!")
             else:
-                if isinstance(traffic, dict):
-                    views_count = traffic.get("count")
-                elif hasattr(traffic, "count"):
-                    views_count = getattr(traffic, "count")
-                elif isinstance(traffic, (list, tuple)):
-                    first = traffic[0] if len(traffic) > 0 else None
-                    if isinstance(first, dict):
-                        views_count = first.get("count")
-                    elif hasattr(first, "count"):
-                        views_count = getattr(first, "count")
-                    elif isinstance(first, list) and all(hasattr(v, "count") for v in first):
-                        views_count = sum(getattr(v, "count") for v in first)
-                    elif all(hasattr(v, "count") for v in traffic):
-                        views_count = sum(getattr(v, "count") for v in traffic)
+                badges += f"![Code Time](http://img.shields.io/badge/{quote('Code Time')}-{quote(str(data['data']['text']))}-blue?style={quote(EM.BADGE_STYLE)})\n"
 
-                if views_count is None:
-                    DBM.w(f"Profile views returned unexpected type ({type(traffic)}), defaulting to 0.")
-                    views_count = 0
+        if EM.SHOW_PROFILE_VIEWS:
+            if EM.DEBUG_RUN or GHM.REMOTE is None:
+                DBM.w("Profile views skipped in DEBUG_RUN mode.")
+            else:
+                DBM.i("Adding profile views info...")
+                views_count = 0
+                try:
+                    traffic = GHM.REMOTE.get_views_traffic(per="week")
+                except Exception as e:
+                    DBM.w(f"Profile views unavailable, defaulting to 0: {e}")
+                else:
+                    if isinstance(traffic, dict):
+                        views_count = traffic.get("count")
+                    elif hasattr(traffic, "count"):
+                        views_count = getattr(traffic, "count")
+                    elif isinstance(traffic, (list, tuple)):
+                        first = traffic[0] if len(traffic) > 0 else None
+                        if isinstance(first, dict):
+                            views_count = first.get("count")
+                        elif hasattr(first, "count"):
+                            views_count = getattr(first, "count")
+                        elif isinstance(first, list) and all(hasattr(v, "count") for v in first):
+                            views_count = sum(getattr(v, "count") for v in first)
+                        elif all(hasattr(v, "count") for v in traffic):
+                            views_count = sum(getattr(v, "count") for v in traffic)
 
-            stats += f"![Profile Views](http://img.shields.io/badge/" f"{quote(FM.t('Profile Views'))}-{views_count}-blue?style={quote(EM.BADGE_STYLE)})\n\n"
+                    if views_count is None:
+                        DBM.w(f"Profile views returned unexpected type ({type(traffic)}), defaulting to 0.")
+                        views_count = 0
 
-    if EM.SHOW_LINES_OF_CODE:
-        DBM.i("Adding lines of code info...")
-        total_loc = sum([yearly_data[y][q][d]["add"] for y in yearly_data.keys() for q in yearly_data[y].keys() for d in yearly_data[y][q].keys()])
-        data = f"{intword(total_loc, format='%.2f')} {FM.t('Lines of code')}"
-        stats += (
-            f"![Lines of code](https://img.shields.io/badge/"
-            f"{quote(FM.t('From Hello World I have written'))}-{quote(data)}-blue?"
-            f"style={quote(EM.BADGE_STYLE)})\n\n"
-        )
+                badges += f"![Profile Views](http://img.shields.io/badge/" f"{quote(FM.t('Profile Views'))}-{views_count}-blue?style={quote(EM.BADGE_STYLE)})\n"
+
+        if EM.SHOW_LINES_OF_CODE:
+            DBM.i("Adding lines of code info...")
+            total_loc = sum([yearly_data[y][q][d]["add"] for y in yearly_data.keys() for q in yearly_data[y].keys() for d in yearly_data[y][q].keys()])
+            data = f"{intword(total_loc, format='%.2f')} {FM.t('Lines of code')}"
+            badges += (
+                f"![Lines of code](https://img.shields.io/badge/"
+                f"{quote(FM.t('From Hello World I have written'))}-{quote(data)}-blue?"
+                f"style={quote(EM.BADGE_STYLE)})\n"
+            )
+            
+        if badges:
+            stats += f"<div align=\"center\">\n\n{badges}\n</div>\n\n"
 
     if EM.SHOW_SHORT_INFO:
         stats += await get_short_github_info()
