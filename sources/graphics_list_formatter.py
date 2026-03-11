@@ -55,10 +55,12 @@ def get_icon_url(name: str, category: str = "color") -> str:
     elif name_lower == "vs code":
         name_lower = "vscode"
         
-    if category == "color":
-        return f"https://icon-iota-neon.vercel.app/color/{name_lower}?size=20"
-    elif category == "ides":
+    if category == "ides":
         return f"https://icon-iota-neon.vercel.app/icon/ides/{name_lower}"
+    elif category == "os":
+        return f"https://icon-iota-neon.vercel.app/icon/os/{name_lower}"
+    elif category == "color" or category == "repos":
+        return f"https://icon-iota-neon.vercel.app/color/{name_lower}?size=20"
     return f"https://icon-iota-neon.vercel.app/color/{name_lower}?size=20"
 
 def format_time_spent(text: str) -> str:
@@ -97,13 +99,13 @@ def make_list(data: List = None, names: List[str] = None, texts: List[str] = Non
             
         # Determine name column HTML
         name_html = ""
-        if category == "day_night" or category == "day_of_week":
+        if category in ["day_night", "day_of_week", "projects"]:
             name_html = f"&nbsp;{n}"
         else:
             icon_url = get_icon_url(n, category)
             valign = ' valign="middle"' if category != "color" else ''
-            width_attr = ' width="30"' if category == "ides" else ''
-            alt_attr = f' alt="{n}"' if category in ["ides", "repos"] else ''
+            width_attr = ' width="30"' if category in ["ides", "os"] else ''
+            alt_attr = f' alt="{n}"' if category in ["ides", "repos", "os"] else ''
             name_html = f'<img src="{icon_url}"{width_attr}{alt_attr}{valign}/> &nbsp;{n}'
             if category == "color":
                  name_html = f'<img src="{icon_url}" />&nbsp;{n}'
@@ -112,7 +114,7 @@ def make_list(data: List = None, names: List[str] = None, texts: List[str] = Non
             
         
         row_html = f'''<tr>\n'''
-        if category == "day_night" or category == "day_of_week":
+        if category in ["day_night", "day_of_week", "projects"]:
             row_html += f'<td style="white-space: nowrap;">\n{name_html}\n</td>\n'
         elif category == "color" and n == "Python":
              row_html += f'<td style="white-space: nowrap;">\n{name_html}\n</td>\n'
