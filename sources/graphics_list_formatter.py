@@ -105,12 +105,12 @@ def make_list(data: List = None, names: List[str] = None, texts: List[str] = Non
             icon_url = get_icon_url(n, category)
             valign = ' valign="middle"' if category != "color" else ''
             width_attr = ' width="30"' if category in ["ides", "os"] else ''
-            alt_attr = f' alt="{n}"' if category in ["ides", "repos", "os"] else ''
+            alt_attr = f' alt="{n}"'
             name_html = f'<img src="{icon_url}"{width_attr}{alt_attr}{valign}/> &nbsp;{n}'
             if category == "color":
-                 name_html = f'<img src="{icon_url}" />&nbsp;{n}'
+                 name_html = f'<img src="{icon_url}"{alt_attr}/>&nbsp;{n}'
                  if n != "Python":
-                      name_html = f'<img src="{icon_url}" valign="middle"/> {n}'
+                      name_html = f'<img src="{icon_url}"{alt_attr} valign="middle"/> {n}'
             
         
         row_html = f'<tr>'
@@ -119,12 +119,12 @@ def make_list(data: List = None, names: List[str] = None, texts: List[str] = Non
         elif category == "color" and n == "Python":
              row_html += f'<td style="white-space: nowrap;">{name_html}</td>'
         elif category == "ides" and n == "PyCharm":
-             row_html += f'<td style="white-space: nowrap;"><img src="{get_icon_url(n, category)}" width="30" valign="middle"/>&nbsp;{n}</td>'
+             row_html += f'<td style="white-space: nowrap;"><img src="{get_icon_url(n, category)}" alt="{n}" width="30" valign="middle"/>&nbsp;{n}</td>'
         else:
              row_html += f'<td>{name_html}</td>'
 
         row_html += f'<td align="center">{format_time_spent(t)}</td>'
-        row_html += f'<td align="center"><img src="{img_url}" width="130"></td></tr>'
+        row_html += f'<td align="center"><img src="{img_url}" alt="{p}%" width="130"></td></tr>'
         
         table_html += row_html
 
