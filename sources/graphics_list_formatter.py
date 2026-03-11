@@ -83,9 +83,9 @@ def make_list(data: List = None, names: List[str] = None, texts: List[str] = Non
     table_html = f'<div align="center"><table><tr><th colspan="3" align="center">{title}</th></tr><tr>'
     
     if category == "day_night":
-         table_html += f'<th width="200" align="left"></th><th width="200" align="center">Commit Massage</th><th width="200" align="center">Progress</th></tr>'
+         table_html += f'<th width="200" align="left">Time of Day</th><th width="200" align="center">Commit Message</th><th width="200" align="center">Progress</th></tr>'
     elif category == "day_of_week":
-         table_html += f'<th width="200" align="left">Day</th><th width="200" align="center">Commit Massages </th><th width="200" align="center">Progress</th></tr>'
+         table_html += f'<th width="200" align="left">Day</th><th width="200" align="center">Commit Messages </th><th width="200" align="center">Progress</th></tr>'
     elif category == "repos":
          table_html += f'<th width="200" align="left">Language</th><th width="200" align="center">Repository</th><th width="200" align="center">Progress</th></tr>'
     else:
@@ -167,7 +167,7 @@ async def make_commit_day_time_list(time_zone: str, repositories: Dict, commit_d
         title = FM.t("I am an Early") if sum(day_times[0:2]) >= sum(day_times[2:4]) else FM.t("I am a Night")
         title_str = f" {title} "
         
-        stats += f"\n{make_list(names=dt_names, texts=dt_texts, percents=dt_percents, top_num=7, sort=False, title=title_str, category='day_night', col2_name='Commit Massage')}\n\n"
+        stats += f"\n{make_list(names=dt_names, texts=dt_texts, percents=dt_percents, top_num=7, sort=False, title=title_str, category='day_night', col2_name='Commit Message')}\n\n"
 
     if EM.SHOW_DAYS_OF_WEEK:
         wd_names = [FM.t(week_day) for week_day in WEEK_DAY_NAMES]
