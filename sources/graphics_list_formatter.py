@@ -47,10 +47,28 @@ def make_graph(percent: float):
     return f"{done_block * percent_quart}{empty_block * (25 - percent_quart)}"
 
 
-def make_list(data: List = None, names: List[str] = None, texts: List[str] = None, percents: List[float] = None, top_num: int = 5, sort: bool = True, title: str = "") -> str:
+def get_icon_url(name: str, category: str = "color") -> str:
+    """Helper to get correct icon urls based on user's pattern."""
+    name_lower = str(name).lower().replace(' ', '')
+    if name_lower == "yml":
+        name_lower = "yaml"
+    elif name_lower == "vs code":
+        name_lower = "vscode"
+        
+    if category == "color":
+        return f"https://icon-iota-neon.vercel.app/color/{name_lower}?size=20"
+    elif category == "ides":
+        return f"https://icon-iota-neon.vercel.app/icon/ides/{name_lower}"
+    return f"https://icon-iota-neon.vercel.app/color/{name_lower}?size=20"
+
+def format_time_spent(text: str) -> str:
+    """Helper to replace spaces with &nbsp; for time spent."""
+    return str(text).replace(" ", "&nbsp;")
+
+def make_list(data: List = None, names: List[str] = None, texts: List[str] = None, percents: List[float] = None, top_num: int = 5, sort: bool = True, title: str = "", category: str = "color", col2_name: str = "Time Spent") -> str:
     """
     Make list of HTML tables displaying progress bars with supportive info.
-    Each row has the following structure: [name of the measure] [quantity description (with words)] [progress bar] [total percentage].
+    Matches the user's custom HTML structure.
     """
     if data is not None:
         names = [value for item in data for key, value in item.items() if key == "name"] if names is None else names
@@ -60,38 +78,55 @@ def make_list(data: List = None, names: List[str] = None, texts: List[str] = Non
     data_tuples = list(zip(names, texts, percents))
     top_data = sorted(data_tuples[:top_num], key=lambda record: record[2], reverse=True) if sort else data_tuples[:top_num]
     
-    table_html = f'''<table width="100%">
-  <thead>
-    <tr>
-      <th colspan="3" align="center">💬 {title if title else "Statistics"}</th>
-    </tr>
-    <tr>
-      <th align="left">Name</th>
-      <th align="center">Time Spent / Quantity</th>
-      <th align="left">Progress</th>
-    </tr>
-  </thead>
-  <tbody>'''
+    table_html = f'''<div align="center">\n<table>\n<tr>\n<th colspan="3" align="center">{title}</th>\n</tr>\n\n<tr>\n'''
+    
+    if category == "day_night":
+         table_html += f'<th width="200" align="left"></th>\n<th width="200" align="center">Commit Massage</th>\n<th width="200" align="center">Progress</th>\n</tr>\n\n'
+    elif category == "day_of_week":
+         table_html += f'<th width="200" align="left">Day</th>\n<th width="200" align="center">Commit Massages </th>\n<th width="200" align="center">Progress</th>\n</tr>\n\n'
+    elif category == "repos":
+         table_html += f'<th width="200" align="left">Language</th>\n<th width="200" align="center">Repository</th>\n<th width="200" align="center">Progress</th>\n</tr>\n\n'
+    else:
+         table_html += f'<th width="200" align="left">{'Language' if category == "color" else ('Editor' if category == "ides" else 'OS')}</th>\n<th width="200" align="center">{col2_name}</th>\n<th width="200" align="center">Progress</th>\n</tr>\n\n'
 
     for n, t, p in top_data:
-        # Generate color based on percentage
-        color = "3fb950" if p > 30 else ("fdb660" if p > 15 else "ce4242")
+        # Determine bar parameters
+        img_url = f"https://geps.dev/progress/{p:.2f}"
+        if category == "day_of_week":
+            img_url += "?barColor=4472C4"
+            
+        # Determine name column HTML
+        name_html = ""
+        if category == "day_night" or category == "day_of_week":
+            name_html = f"&nbsp;{n}"
+        else:
+            icon_url = get_icon_url(n, category)
+            valign = ' valign="middle"' if category != "color" else ''
+            width_attr = ' width="30"' if category == "ides" else ''
+            alt_attr = f' alt="{n}"' if category in ["ides", "repos"] else ''
+            name_html = f'<img src="{icon_url}"{width_attr}{alt_attr}{valign}/> &nbsp;{n}'
+            if category == "color":
+                 name_html = f'<img src="{icon_url}" />&nbsp;{n}'
+                 if n != "Python":
+                      name_html = f'<img src="{icon_url}" valign="middle"/> {n}'
+            
         
-        # Format the name: Try to get a devicon, otherwise just the name
-        icon_url = f"https://raw.githubusercontent.com/devicons/devicon/master/icons/{str(n).lower().replace(' ', '')}/{str(n).lower().replace(' ', '')}-original.svg"
-        name_html = f'<img src="{icon_url}" width="16" height="16" style="vertical-align: middle;" onerror="this.style.display=\'none\'"> {n}'
+        row_html = f'''<tr>\n'''
+        if category == "day_night" or category == "day_of_week":
+            row_html += f'<td style="white-space: nowrap;">\n{name_html}\n</td>\n'
+        elif category == "color" and n == "Python":
+             row_html += f'<td style="white-space: nowrap;">\n{name_html}\n</td>\n'
+        elif category == "ides" and n == "PyCharm":
+             row_html += f'<td style="white-space: nowrap;">\n<img src="{get_icon_url(n, category)}" width="30" valign="middle"/>&nbsp;{n}\n</td>\n'
+        else:
+             row_html += f'<td>\n{name_html}\n</td>\n'
+
+        row_html += f'<td align="center">{format_time_spent(t)}</td>\n'
+        row_html += f'<td align="center">\n<img src="{img_url}" width="130">\n</td>\n</tr>\n\n'
         
-        row_html = f'''
-    <tr>
-      <td>{name_html}</td>
-      <td align="center">{t}</td>
-      <td><img src="https://geps.dev/progress/{int(p)}?color={color}" alt="{p:05.2f}%" /></td>
-    </tr>'''
         table_html += row_html
 
-    table_html += '''
-  </tbody>
-</table>'''
+    table_html += '''</table>\n</div>'''
     return table_html
 
 
@@ -128,14 +163,20 @@ async def make_commit_day_time_list(time_zone: str, repositories: Dict, commit_d
         dt_texts = [f"{day_time} commits" for day_time in day_times]
         dt_percents = [0 if sum_day == 0 else round((day_time / sum_day) * 100, 2) for day_time in day_times]
         title = FM.t("I am an Early") if sum(day_times[0:2]) >= sum(day_times[2:4]) else FM.t("I am a Night")
-        stats += f"**{title}** \n\n{make_list(names=dt_names, texts=dt_texts, percents=dt_percents, top_num=7, sort=False, title='Day/Night Commits')}\n"
+        title_str = f" {title} "
+        if "Early" in title:
+             title_str += "🐤 "
+        else:
+             title_str += "🦉 "
+        
+        stats += f"\n{make_list(names=dt_names, texts=dt_texts, percents=dt_percents, top_num=7, sort=False, title=title_str, category='day_night', col2_name='Commit Massage')}\n\n"
 
     if EM.SHOW_DAYS_OF_WEEK:
         wd_names = [FM.t(week_day) for week_day in WEEK_DAY_NAMES]
         wd_texts = [f"{week_day} commits" for week_day in week_days]
         wd_percents = [0 if sum_week == 0 else round((week_day / sum_week) * 100, 2) for week_day in week_days]
-        title = FM.t("I am Most Productive on") % wd_names[wd_percents.index(max(wd_percents))]
-        stats += f"📅 **{title}** \n\n{make_list(names=wd_names, texts=wd_texts, percents=wd_percents, top_num=7, sort=False, title='Day of Week Commits')}\n"
+        title = f"📅 {FM.t('I am Most Productive on %s' % wd_names[wd_percents.index(max(wd_percents))])}"
+        stats += f"\n{make_list(names=wd_names, texts=wd_texts, percents=wd_percents, top_num=7, sort=False, title=title, category='day_of_week')}\n\n"
 
     return stats
 
@@ -160,7 +201,7 @@ def make_language_per_repo_list(repositories: Dict) -> str:
 
     if language_count:
         top_language = max(language_count.keys(), key=lambda x: language_count[x]["count"])
-        title = f"**{FM.t('I Mostly Code in') % top_language}** \n\n"
+        title = f" {FM.t('I Mostly Code in %s' % top_language)} "
     else:
         title = ""
-    return f"{title}{make_list(names=names, texts=texts, percents=percents, title='Repos per Language')}\n\n"
+    return f"{make_list(names=names, texts=texts, percents=percents, title=title, category='repos', col2_name='Repository')}\n\n"
