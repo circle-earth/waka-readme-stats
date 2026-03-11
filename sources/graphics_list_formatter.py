@@ -47,32 +47,52 @@ def make_graph(percent: float):
     return f"{done_block * percent_quart}{empty_block * (25 - percent_quart)}"
 
 
-def make_list(data: List = None, names: List[str] = None, texts: List[str] = None, percents: List[float] = None, top_num: int = 5, sort: bool = True) -> str:
+def make_list(data: List = None, names: List[str] = None, texts: List[str] = None, percents: List[float] = None, top_num: int = 5, sort: bool = True, title: str = "") -> str:
     """
-    Make list of text progress bars with supportive info.
+    Make list of HTML tables displaying progress bars with supportive info.
     Each row has the following structure: [name of the measure] [quantity description (with words)] [progress bar] [total percentage].
-    Name of the measure: up to 25 characters.
-    Quantity description: how many _things_ were found, up to 20 characters.
-    Progress bar: measure percentage, 25 characters.
-    Total percentage: floating point percentage.
-
-    :param data: list of dictionaries, each of them containing a measure (name, text and percent).
-    :param names: list of names (names of measure), overloads data if defined.
-    :param texts: list of texts (quantity descriptions), overloads data if defined.
-    :param percents: list of percents (total percentages), overloads data if defined.
-    :param top_num: how many measures to display, default: 5.
-    :param sort: if measures should be sorted by total percentage, default: True.
-    :returns: The string representation of the list.
     """
     if data is not None:
         names = [value for item in data for key, value in item.items() if key == "name"] if names is None else names
         texts = [value for item in data for key, value in item.items() if key == "text"] if texts is None else texts
         percents = [value for item in data for key, value in item.items() if key == "percent"] if percents is None else percents
 
-    data = list(zip(names, texts, percents))
-    top_data = sorted(data[:top_num], key=lambda record: record[2], reverse=True) if sort else data[:top_num]
-    data_list = [f"{n[:25]}{' ' * (25 - len(n))}{t}{' ' * (20 - len(t))}{make_graph(p)}   {p:05.2f} % " for n, t, p in top_data]
-    return "\n".join(data_list)
+    data_tuples = list(zip(names, texts, percents))
+    top_data = sorted(data_tuples[:top_num], key=lambda record: record[2], reverse=True) if sort else data_tuples[:top_num]
+    
+    table_html = f'''<table width="100%">
+  <thead>
+    <tr>
+      <th colspan="3" align="center">💬 {title if title else "Statistics"}</th>
+    </tr>
+    <tr>
+      <th align="left">Name</th>
+      <th align="center">Time Spent / Quantity</th>
+      <th align="left">Progress</th>
+    </tr>
+  </thead>
+  <tbody>'''
+
+    for n, t, p in top_data:
+        # Generate color based on percentage
+        color = "3fb950" if p > 30 else ("fdb660" if p > 15 else "ce4242")
+        
+        # Format the name: Try to get a devicon, otherwise just the name
+        icon_url = f"https://raw.githubusercontent.com/devicons/devicon/master/icons/{str(n).lower().replace(' ', '')}/{str(n).lower().replace(' ', '')}-original.svg"
+        name_html = f'<img src="{icon_url}" width="16" height="16" style="vertical-align: middle;" onerror="this.style.display=\'none\'"> {n}'
+        
+        row_html = f'''
+    <tr>
+      <td>{name_html}</td>
+      <td align="center">{t}</td>
+      <td><img src="https://geps.dev/progress/{int(p)}?color={color}" alt="{p:05.2f}%" /></td>
+    </tr>'''
+        table_html += row_html
+
+    table_html += '''
+  </tbody>
+</table>'''
+    return table_html
 
 
 async def make_commit_day_time_list(time_zone: str, repositories: Dict, commit_dates: Dict) -> str:
@@ -108,14 +128,14 @@ async def make_commit_day_time_list(time_zone: str, repositories: Dict, commit_d
         dt_texts = [f"{day_time} commits" for day_time in day_times]
         dt_percents = [0 if sum_day == 0 else round((day_time / sum_day) * 100, 2) for day_time in day_times]
         title = FM.t("I am an Early") if sum(day_times[0:2]) >= sum(day_times[2:4]) else FM.t("I am a Night")
-        stats += f"**{title}** \n\n```text\n{make_list(names=dt_names, texts=dt_texts, percents=dt_percents, top_num=7, sort=False)}\n```\n"
+        stats += f"**{title}** \n\n{make_list(names=dt_names, texts=dt_texts, percents=dt_percents, top_num=7, sort=False, title='Day/Night Commits')}\n"
 
     if EM.SHOW_DAYS_OF_WEEK:
         wd_names = [FM.t(week_day) for week_day in WEEK_DAY_NAMES]
         wd_texts = [f"{week_day} commits" for week_day in week_days]
         wd_percents = [0 if sum_week == 0 else round((week_day / sum_week) * 100, 2) for week_day in week_days]
         title = FM.t("I am Most Productive on") % wd_names[wd_percents.index(max(wd_percents))]
-        stats += f"📅 **{title}** \n\n```text\n{make_list(names=wd_names, texts=wd_texts, percents=wd_percents, top_num=7, sort=False)}\n```\n"
+        stats += f"📅 **{title}** \n\n{make_list(names=wd_names, texts=wd_texts, percents=wd_percents, top_num=7, sort=False, title='Day of Week Commits')}\n"
 
     return stats
 
@@ -143,4 +163,4 @@ def make_language_per_repo_list(repositories: Dict) -> str:
         title = f"**{FM.t('I Mostly Code in') % top_language}** \n\n"
     else:
         title = ""
-    return f"{title}```text\n{make_list(names=names, texts=texts, percents=percents)}\n```\n\n"
+    return f"{title}{make_list(names=names, texts=texts, percents=percents, title='Repos per Language')}\n\n"
