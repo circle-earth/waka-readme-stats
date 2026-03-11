@@ -46,15 +46,15 @@ async def get_waka_time_stats(repositories: Dict, commit_dates: Dict) -> str:
     if EM.SHOW_TIMEZONE or EM.SHOW_LANGUAGE or EM.SHOW_EDITORS or EM.SHOW_PROJECTS or EM.SHOW_OS:
         no_activity = FM.t("No Activity Tracked This Week")
         
-        stats += '<div align="center">\n<table>\n'
-        stats += f'<tr>\n<th colspan="1" width="600" align="center"> 📊 {FM.t("This Week I Spend My Time On")} </th>\n</tr>\n'
+        stats += '<div align="center"><table>'
+        stats += f'<tr><th colspan="1" width="600" align="center"> 📊 {FM.t("This Week I Spend My Time On")} </th></tr>'
 
         if EM.SHOW_TIMEZONE:
             DBM.i("Adding user timezone info...")
             time_zone = data["data"]["timezone"]
-            stats += f'<tr>\n<th colspan="1" width="600" align="center"> 🕑︎ {FM.t("Timezone")}: {time_zone} </th>\n</tr>\n\n'
+            stats += f'<tr><th colspan="1" width="600" align="center"> 🕑︎ {FM.t("Timezone")}: {time_zone} </th></tr>'
             
-        stats += '</table>\n</div>\n\n'
+        stats += '</table></div>\n\n'
 
         if EM.SHOW_LANGUAGE:
             DBM.i("Adding user top languages info...")

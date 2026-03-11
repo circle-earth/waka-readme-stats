@@ -80,16 +80,16 @@ def make_list(data: List = None, names: List[str] = None, texts: List[str] = Non
     data_tuples = list(zip(names, texts, percents))
     top_data = sorted(data_tuples[:top_num], key=lambda record: record[2], reverse=True) if sort else data_tuples[:top_num]
     
-    table_html = f'''<div align="center">\n<table>\n<tr>\n<th colspan="3" align="center">{title}</th>\n</tr>\n\n<tr>\n'''
+    table_html = f'<div align="center"><table><tr><th colspan="3" align="center">{title}</th></tr><tr>'
     
     if category == "day_night":
-         table_html += f'<th width="200" align="left"></th>\n<th width="200" align="center">Commit Massage</th>\n<th width="200" align="center">Progress</th>\n</tr>\n\n'
+         table_html += f'<th width="200" align="left"></th><th width="200" align="center">Commit Massage</th><th width="200" align="center">Progress</th></tr>'
     elif category == "day_of_week":
-         table_html += f'<th width="200" align="left">Day</th>\n<th width="200" align="center">Commit Massages </th>\n<th width="200" align="center">Progress</th>\n</tr>\n\n'
+         table_html += f'<th width="200" align="left">Day</th><th width="200" align="center">Commit Massages </th><th width="200" align="center">Progress</th></tr>'
     elif category == "repos":
-         table_html += f'<th width="200" align="left">Language</th>\n<th width="200" align="center">Repository</th>\n<th width="200" align="center">Progress</th>\n</tr>\n\n'
+         table_html += f'<th width="200" align="left">Language</th><th width="200" align="center">Repository</th><th width="200" align="center">Progress</th></tr>'
     else:
-         table_html += f'<th width="200" align="left">{'Language' if category == "color" else ('Editor' if category == "ides" else 'OS')}</th>\n<th width="200" align="center">{col2_name}</th>\n<th width="200" align="center">Progress</th>\n</tr>\n\n'
+         table_html += f'<th width="200" align="left">{'Language' if category == "color" else ('Editor' if category == "ides" else 'OS')}</th><th width="200" align="center">{col2_name}</th><th width="200" align="center">Progress</th></tr>'
 
     for n, t, p in top_data:
         # Determine bar parameters
@@ -113,22 +113,22 @@ def make_list(data: List = None, names: List[str] = None, texts: List[str] = Non
                       name_html = f'<img src="{icon_url}" valign="middle"/> {n}'
             
         
-        row_html = f'''<tr>\n'''
+        row_html = f'<tr>'
         if category in ["day_night", "day_of_week", "projects"]:
-            row_html += f'<td style="white-space: nowrap;">\n{name_html}\n</td>\n'
+            row_html += f'<td style="white-space: nowrap;">{name_html}</td>'
         elif category == "color" and n == "Python":
-             row_html += f'<td style="white-space: nowrap;">\n{name_html}\n</td>\n'
+             row_html += f'<td style="white-space: nowrap;">{name_html}</td>'
         elif category == "ides" and n == "PyCharm":
-             row_html += f'<td style="white-space: nowrap;">\n<img src="{get_icon_url(n, category)}" width="30" valign="middle"/>&nbsp;{n}\n</td>\n'
+             row_html += f'<td style="white-space: nowrap;"><img src="{get_icon_url(n, category)}" width="30" valign="middle"/>&nbsp;{n}</td>'
         else:
-             row_html += f'<td>\n{name_html}\n</td>\n'
+             row_html += f'<td>{name_html}</td>'
 
-        row_html += f'<td align="center">{format_time_spent(t)}</td>\n'
-        row_html += f'<td align="center">\n<img src="{img_url}" width="130">\n</td>\n</tr>\n\n'
+        row_html += f'<td align="center">{format_time_spent(t)}</td>'
+        row_html += f'<td align="center"><img src="{img_url}" width="130"></td></tr>'
         
         table_html += row_html
 
-    table_html += '''</table>\n</div>'''
+    table_html += '</table></div>'
     return table_html
 
 
@@ -166,10 +166,6 @@ async def make_commit_day_time_list(time_zone: str, repositories: Dict, commit_d
         dt_percents = [0 if sum_day == 0 else round((day_time / sum_day) * 100, 2) for day_time in day_times]
         title = FM.t("I am an Early") if sum(day_times[0:2]) >= sum(day_times[2:4]) else FM.t("I am a Night")
         title_str = f" {title} "
-        if "Early" in title:
-             title_str += "🐤 "
-        else:
-             title_str += "🦉 "
         
         stats += f"\n{make_list(names=dt_names, texts=dt_texts, percents=dt_percents, top_num=7, sort=False, title=title_str, category='day_night', col2_name='Commit Massage')}\n\n"
 
@@ -177,7 +173,8 @@ async def make_commit_day_time_list(time_zone: str, repositories: Dict, commit_d
         wd_names = [FM.t(week_day) for week_day in WEEK_DAY_NAMES]
         wd_texts = [f"{week_day} commits" for week_day in week_days]
         wd_percents = [0 if sum_week == 0 else round((week_day / sum_week) * 100, 2) for week_day in week_days]
-        title = f"📅 {FM.t('I am Most Productive on')} {wd_names[wd_percents.index(max(wd_percents))]}"
+        title_raw = FM.t('I am Most Productive on').replace('%s', '')
+        title = f"📅 {title_raw.strip()} {wd_names[wd_percents.index(max(wd_percents))]}"
         stats += f"\n{make_list(names=wd_names, texts=wd_texts, percents=wd_percents, top_num=7, sort=False, title=title, category='day_of_week')}\n\n"
 
     return stats
@@ -203,7 +200,8 @@ def make_language_per_repo_list(repositories: Dict) -> str:
 
     if language_count:
         top_language = max(language_count.keys(), key=lambda x: language_count[x]["count"])
-        title = f" {FM.t('I Mostly Code in')} {top_language} "
+        title_raw = FM.t('I Mostly Code in').replace('%s', '')
+        title = f" {title_raw.strip()} {top_language} "
     else:
         title = ""
     return f"{make_list(names=names, texts=texts, percents=percents, title=title, category='repos', col2_name='Repository')}\n\n"
