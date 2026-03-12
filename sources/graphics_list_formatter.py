@@ -213,7 +213,7 @@ def make_language_per_repo_list(repositories: Dict) -> str:
     if language_count:
         top_language = max(language_count.keys(), key=lambda x: language_count[x]["count"])
         title_raw = FM.t('I Mostly Code in').replace('%s', '')
-        title = f" {title_raw.strip()} {top_language} "
+        title = f" 💻 {title_raw.strip()} {top_language} "
     else:
         title = ""
     return f"{make_list(names=names, texts=texts, percents=percents, title=title, category='repos', col2_name='Repository')}\n\n"
