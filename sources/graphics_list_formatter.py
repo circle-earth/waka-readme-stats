@@ -126,14 +126,17 @@ def make_list(data: List = None, names: List[str] = None, texts: List[str] = Non
             
         
         row_html = f'<tr>'
+        # Ensure name column stays on one line with &nbsp; and nowrap
+        n_fixed = n.replace(" ", "&nbsp;")
+        
         if category in ["day_night", "day_of_week"]:
-            row_html += f'<td width="400" style="white-space: nowrap;">{name_html}</td>'
+            row_html += f'<td width="400" style="white-space: nowrap;">&nbsp;{n_fixed}</td>'
         elif category == "color" and n == "Python":
-             row_html += f'<td width="400" style="white-space: nowrap;">{name_html}</td>'
+             row_html += f'<td width="400" style="white-space: nowrap;">{name_html.replace(n, n_fixed)}</td>'
         elif category == "ides" and n == "PyCharm":
-             row_html += f'<td width="400" style="white-space: nowrap;"><img src="{get_icon_url(n, category)}" alt="{n}" width="30" valign="middle"/>&nbsp;{n}</td>'
+             row_html += f'<td width="400" style="white-space: nowrap;"><img src="{get_icon_url(n, category)}" alt="{n}" width="30" valign="middle"/>&nbsp;{n_fixed}</td>'
         else:
-             row_html += f'<td width="400">{name_html}</td>'
+             row_html += f'<td width="400" style="white-space: nowrap;">{name_html.replace(" &nbsp;"+n, "&nbsp;"+n_fixed).replace("&nbsp;"+n, "&nbsp;"+n_fixed)}</td>'
 
         row_html += f'<td width="400" align="center">{format_time_spent(t)}</td>'
         row_html += f'<td width="400" align="center"><img src="{img_url}" alt="{p}%" width="200" height="30"></td></tr>'
@@ -173,7 +176,7 @@ async def make_commit_day_time_list(time_zone: str, repositories: Dict, commit_d
     day_times = day_times[1:] + day_times[:1]
 
     if EM.SHOW_COMMIT:
-        dt_names = [f"{DAY_TIME_EMOJI[i]} {FM.t(DAY_TIME_NAMES[i])}" for i in range(len(day_times))]
+        dt_names = [f"{DAY_TIME_EMOJI[i]}&nbsp;{FM.t(DAY_TIME_NAMES[i])}" for i in range(len(day_times))]
         dt_texts = [f"{day_time} commits" for day_time in day_times]
         dt_percents = [0 if sum_day == 0 else round((day_time / sum_day) * 100, 2) for day_time in day_times]
         title = FM.t("I am an Early") if sum(day_times[0:2]) >= sum(day_times[2:4]) else FM.t("I am a Night")
