@@ -124,7 +124,7 @@ def make_list(data: List = None, names: List[str] = None, texts: List[str] = Non
              row_html += f'<td width="400">{name_html}</td>'
 
         row_html += f'<td width="400" align="center">{format_time_spent(t)}</td>'
-        row_html += f'<td width="400" align="center"><img src="{img_url}" alt="{p}%" width="400" height="40"></td></tr>'
+        row_html += f'<td width="400" align="center"><img src="{img_url}" alt="{p}%" width="300" height="30"></td></tr>'
         
         table_html += row_html
 
