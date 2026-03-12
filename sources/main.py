@@ -91,7 +91,7 @@ async def get_short_github_info() -> str:
     """
     DBM.i("Adding short GitHub info...")
     title = f"🐱 {FM.t('My GitHub Data')}"
-    stats = f"<div align=\"center\"><table><tr><th colspan=\"2\" align=\"center\">{title}</th></tr>"
+    stats = f"<div align=\"center\"><table><tr><th colspan=\"2\" width=\"1200\" align=\"center\">{title}</th></tr>"
 
     DBM.i("Adding user disk usage info...")
     if GHM.USER.disk_usage is None:
@@ -100,7 +100,8 @@ async def get_short_github_info() -> str:
     else:
         disk_usage_val = naturalsize(GHM.USER.disk_usage)
     
-    disk_usage_label = f"&nbsp;📦&nbsp;{FM.t('Used in GitHub\'s Storage').replace('%s', '').strip()}"
+    label_raw = FM.t('Used in GitHub\'s Storage').replace('%s', '').strip()
+    disk_usage_label = f"&nbsp;📦&nbsp;{label_raw.replace(' ', '&nbsp;')}"
     stats += f'<tr><td width="400" align="left" style="white-space: nowrap;">{disk_usage_label}</td><td width="400" align="center">{disk_usage_val.replace(" ", "&nbsp;")}</td></tr>'
 
     data = await DM.get_remote_json("github_stats")
@@ -110,24 +111,28 @@ async def get_short_github_info() -> str:
 
     DBM.i("Adding contributions info...")
     if len(data["years"]) > 0:
-        contrib_label = f"&nbsp;🏆&nbsp;{FM.t('Contributions in the year').replace('%s', '').strip()}"
+        label_raw = FM.t('Contributions in the year').replace('%s', '').strip()
+        contrib_label = f"&nbsp;🏆&nbsp;{label_raw.replace(' ', '&nbsp;')}"
         contrib_val = intcomma(data["years"][0]["total"])
         stats += f'<tr><td width="400" align="left" style="white-space: nowrap;">{contrib_label}</td><td width="400" align="center">{contrib_val}</td></tr>'
 
     DBM.i("Adding opted for hire info...")
     opted_to_hire = GHM.USER.hireable
-    hire_label = f"&nbsp;💼&nbsp;{FM.t('Opted to Hire') if opted_to_hire else FM.t('Not Opted to Hire')}"
+    label_text = FM.t('Opted to Hire') if opted_to_hire else FM.t('Not Opted to Hire')
+    hire_label = f"&nbsp;💼&nbsp;{label_text.replace(' ', '&nbsp;')}"
     hire_val = "Available" if opted_to_hire else "Not&nbsp;Available"
     stats += f'<tr><td width="400" align="left" style="white-space: nowrap;">{hire_label}</td><td width="400" align="center">{hire_val}</td></tr>'
 
     DBM.i("Adding public repositories info...")
     public_repo = GHM.USER.public_repos
-    pub_label = f"&nbsp;📜&nbsp;{FM.t('public repositories').replace(' %d', '').strip() if public_repo != 1 else FM.t('public repository').replace(' %d', '').strip()}"
+    label_raw = FM.t('public repositories').replace('%d', '').strip() if public_repo != 1 else FM.t('public repository').replace('%d', '').strip()
+    pub_label = f"&nbsp;📜&nbsp;{label_raw.replace(' ', '&nbsp;')}"
     stats += f'<tr><td width="400" align="left" style="white-space: nowrap;">{pub_label}</td><td width="400" align="center">{public_repo}</td></tr>'
 
     DBM.i("Adding private repositories info...")
     private_repo = GHM.USER.owned_private_repos if GHM.USER.owned_private_repos is not None else 0
-    priv_label = f"&nbsp;🔑&nbsp;{FM.t('private repositories').replace(' %d', '').strip() if private_repo != 1 else FM.t('private repository').replace(' %d', '').strip()}"
+    label_raw = FM.t('private repositories').replace('%d', '').strip() if private_repo != 1 else FM.t('private repository').replace('%d', '').strip()
+    priv_label = f"&nbsp;🔑&nbsp;{label_raw.replace(' ', '&nbsp;')}"
     stats += f'<tr><td width="400" align="left" style="white-space: nowrap;">{priv_label}</td><td width="400" align="center">{private_repo}</td></tr>'
 
     stats += "</table></div>\n\n"
