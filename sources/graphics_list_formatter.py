@@ -60,7 +60,7 @@ def get_icon_url(name: str, category: str = "color") -> str:
     elif category == "os":
         return f"https://icon-iota-neon.vercel.app/icon/os/{name_lower}"
     elif category == "projects":
-        return f"https://icon-iota-neon.vercel.app/icon/projects/{name_lower}"
+        return "https://icon-iota-neon.vercel.app/icon/project/branch?color=58A6FF"
     elif category == "color" or category == "repos":
         return f"https://icon-iota-neon.vercel.app/color/{name_lower}?size=20"
     return f"https://icon-iota-neon.vercel.app/color/{name_lower}?size=20"
@@ -116,7 +116,7 @@ def make_list(data: List = None, names: List[str] = None, texts: List[str] = Non
         else:
             icon_url = get_icon_url(n, category)
             valign = ' valign="middle"' if category != "color" else ''
-            width_attr = ' width="30"' if category in ["ides", "os"] else ''
+            width_attr = ' width="20"' if category == "projects" else (' width="30"' if category in ["ides", "os"] else '')
             alt_attr = f' alt="{n}"'
             name_html = f'<img src="{icon_url}"{width_attr}{alt_attr}{valign}/> &nbsp;{n}'
             if category == "color":
@@ -136,7 +136,7 @@ def make_list(data: List = None, names: List[str] = None, texts: List[str] = Non
              row_html += f'<td width="400">{name_html}</td>'
 
         row_html += f'<td width="400" align="center">{format_time_spent(t)}</td>'
-        row_html += f'<td width="400" align="center"><img src="{img_url}" alt="{p}%" width="300" height="30"></td></tr>'
+        row_html += f'<td width="400" align="center"><img src="{img_url}" alt="{p}%" width="200" height="30"></td></tr>'
         
         table_html += row_html
 
