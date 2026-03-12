@@ -115,16 +115,16 @@ def make_list(data: List = None, names: List[str] = None, texts: List[str] = Non
         
         row_html = f'<tr>'
         if category in ["day_night", "day_of_week", "projects"]:
-            row_html += f'<td style="white-space: nowrap;">{name_html}</td>'
+            row_html += f'<td width="200" style="white-space: nowrap;">{name_html}</td>'
         elif category == "color" and n == "Python":
-             row_html += f'<td style="white-space: nowrap;">{name_html}</td>'
+             row_html += f'<td width="200" style="white-space: nowrap;">{name_html}</td>'
         elif category == "ides" and n == "PyCharm":
-             row_html += f'<td style="white-space: nowrap;"><img src="{get_icon_url(n, category)}" alt="{n}" width="30" valign="middle"/>&nbsp;{n}</td>'
+             row_html += f'<td width="200" style="white-space: nowrap;"><img src="{get_icon_url(n, category)}" alt="{n}" width="30" valign="middle"/>&nbsp;{n}</td>'
         else:
-             row_html += f'<td>{name_html}</td>'
+             row_html += f'<td width="200">{name_html}</td>'
 
-        row_html += f'<td align="center">{format_time_spent(t)}</td>'
-        row_html += f'<td align="center"><img src="{img_url}" alt="{p}%" width="400" height="40"></td></tr>'
+        row_html += f'<td width="200" align="center">{format_time_spent(t)}</td>'
+        row_html += f'<td width="400" align="center"><img src="{img_url}" alt="{p}%" width="400" height="40"></td></tr>'
         
         table_html += row_html
 
