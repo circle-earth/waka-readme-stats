@@ -90,53 +90,47 @@ async def get_short_github_info() -> str:
     :returns: String representation of the info.
     """
     DBM.i("Adding short GitHub info...")
-    stats = f"<div align=\"center\">\n\n**🐱 {FM.t('My GitHub Data')}** \n\n"
+    title = f"🐱 {FM.t('My GitHub Data')}"
+    stats = f"<div align=\"center\"><table><tr><th colspan=\"2\" align=\"center\">{title}</th></tr>"
 
     DBM.i("Adding user disk usage info...")
     if GHM.USER.disk_usage is None:
-        disk_usage = FM.t("Used in GitHub's Storage") % "?"
+        disk_usage_val = "?"
         DBM.p("Please add new github personal access token with user permission!")
     else:
-        disk_usage = FM.t("Used in GitHub's Storage") % naturalsize(GHM.USER.disk_usage)
-    stats += f"> 📦 {disk_usage} \n > \n"
+        disk_usage_val = naturalsize(GHM.USER.disk_usage)
+    
+    disk_usage_label = f"&nbsp;📦&nbsp;{FM.t('Used in GitHub\'s Storage').replace(' %s', '')}"
+    stats += f'<tr><td width="400" align="left" style="white-space: nowrap;">{disk_usage_label}</td><td width="400" align="center">{disk_usage_val.replace(" ", "&nbsp;")}</td></tr>'
 
     data = await DM.get_remote_json("github_stats")
     if data is None:
         DBM.p("GitHub contributions data unavailable!")
-        return stats + "</div>\n\n"
+        return stats + "</table></div>\n\n"
 
     DBM.i("Adding contributions info...")
     if len(data["years"]) > 0:
-        contributions = FM.t("Contributions in the year") % (
-            intcomma(data["years"][0]["total"]),
-            data["years"][0]["year"],
-        )
-        stats += f"> 🏆 {contributions}\n > \n"
-    else:
-        DBM.p("GitHub contributions data unavailable!")
+        contrib_label = f"&nbsp;🏆&nbsp;{FM.t('Contributions in the year').split(' %s ')[1]}"
+        contrib_val = intcomma(data["years"][0]["total"])
+        stats += f'<tr><td width="400" align="left" style="white-space: nowrap;">{contrib_label}</td><td width="400" align="center">{contrib_val}</td></tr>'
 
     DBM.i("Adding opted for hire info...")
     opted_to_hire = GHM.USER.hireable
-    if opted_to_hire:
-        stats += f"> 💼 {FM.t('Opted to Hire')}\n > \n"
-    else:
-        stats += f"> 🚫 {FM.t('Not Opted to Hire')}\n > \n"
+    hire_label = f"&nbsp;💼&nbsp;{FM.t('Opted to Hire') if opted_to_hire else FM.t('Not Opted to Hire')}"
+    hire_val = "Available" if opted_to_hire else "Not&nbsp;Available"
+    stats += f'<tr><td width="400" align="left" style="white-space: nowrap;">{hire_label}</td><td width="400" align="center">{hire_val}</td></tr>'
 
     DBM.i("Adding public repositories info...")
     public_repo = GHM.USER.public_repos
-    if public_repo != 1:
-        stats += f"> 📜 {FM.t('public repositories') % public_repo} \n > \n"
-    else:
-        stats += f"> 📜 {FM.t('public repository') % public_repo} \n > \n"
+    pub_label = f"&nbsp;📜&nbsp;{FM.t('public repositories').replace(' %s', '') if public_repo != 1 else FM.t('public repository').replace(' %s', '')}"
+    stats += f'<tr><td width="400" align="left" style="white-space: nowrap;">{pub_label}</td><td width="400" align="center">{public_repo}</td></tr>'
 
     DBM.i("Adding private repositories info...")
     private_repo = GHM.USER.owned_private_repos if GHM.USER.owned_private_repos is not None else 0
-    if public_repo != 1:
-        stats += f"> 🔑 {FM.t('private repositories') % private_repo} \n > \n"
-    else:
-        stats += f"> 🔑 {FM.t('private repository') % private_repo} \n > \n"
+    priv_label = f"&nbsp;🔑&nbsp;{FM.t('private repositories').replace(' %s', '') if private_repo != 1 else FM.t('private repository').replace(' %s', '')}"
+    stats += f'<tr><td width="400" align="left" style="white-space: nowrap;">{priv_label}</td><td width="400" align="center">{private_repo}</td></tr>'
 
-    stats += "</div>\n\n"
+    stats += "</table></div>\n\n"
     DBM.g("Short GitHub info added!")
     return stats
 
