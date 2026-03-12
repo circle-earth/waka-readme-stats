@@ -100,7 +100,7 @@ async def get_short_github_info() -> str:
     else:
         disk_usage_val = naturalsize(GHM.USER.disk_usage)
     
-    disk_usage_label = f"&nbsp;📦&nbsp;{FM.t('Used in GitHub\'s Storage').replace(' %s', '')}"
+    disk_usage_label = f"&nbsp;📦&nbsp;{FM.t('Used in GitHub\'s Storage').replace('%s', '').strip()}"
     stats += f'<tr><td width="400" align="left" style="white-space: nowrap;">{disk_usage_label}</td><td width="400" align="center">{disk_usage_val.replace(" ", "&nbsp;")}</td></tr>'
 
     data = await DM.get_remote_json("github_stats")
@@ -110,7 +110,7 @@ async def get_short_github_info() -> str:
 
     DBM.i("Adding contributions info...")
     if len(data["years"]) > 0:
-        contrib_label = f"&nbsp;🏆&nbsp;{FM.t('Contributions in the year').split(' %s ')[1]}"
+        contrib_label = f"&nbsp;🏆&nbsp;{FM.t('Contributions in the year').replace('%s', '').strip()}"
         contrib_val = intcomma(data["years"][0]["total"])
         stats += f'<tr><td width="400" align="left" style="white-space: nowrap;">{contrib_label}</td><td width="400" align="center">{contrib_val}</td></tr>'
 
@@ -122,12 +122,12 @@ async def get_short_github_info() -> str:
 
     DBM.i("Adding public repositories info...")
     public_repo = GHM.USER.public_repos
-    pub_label = f"&nbsp;📜&nbsp;{FM.t('public repositories').replace(' %s', '') if public_repo != 1 else FM.t('public repository').replace(' %s', '')}"
+    pub_label = f"&nbsp;📜&nbsp;{FM.t('public repositories').replace(' %d', '').strip() if public_repo != 1 else FM.t('public repository').replace(' %d', '').strip()}"
     stats += f'<tr><td width="400" align="left" style="white-space: nowrap;">{pub_label}</td><td width="400" align="center">{public_repo}</td></tr>'
 
     DBM.i("Adding private repositories info...")
     private_repo = GHM.USER.owned_private_repos if GHM.USER.owned_private_repos is not None else 0
-    priv_label = f"&nbsp;🔑&nbsp;{FM.t('private repositories').replace(' %s', '') if private_repo != 1 else FM.t('private repository').replace(' %s', '')}"
+    priv_label = f"&nbsp;🔑&nbsp;{FM.t('private repositories').replace(' %d', '').strip() if private_repo != 1 else FM.t('private repository').replace(' %d', '').strip()}"
     stats += f'<tr><td width="400" align="left" style="white-space: nowrap;">{priv_label}</td><td width="400" align="center">{private_repo}</td></tr>'
 
     stats += "</table></div>\n\n"
