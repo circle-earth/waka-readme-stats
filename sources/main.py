@@ -68,7 +68,7 @@ async def get_waka_time_stats(repositories: Dict, commit_dates: Dict) -> str:
 
         if EM.SHOW_PROJECTS:
             DBM.i("Adding user projects info...")
-            project_list = no_activity if len(data["data"]["projects"]) == 0 else make_list(data["data"]["projects"], title=FM.t('Projects'))
+            project_list = no_activity if len(data["data"]["projects"]) == 0 else make_list(data["data"]["projects"], title=FM.t('Projects'), category="projects")
             stats += f"{project_list}\n\n"
 
         if EM.SHOW_OS:

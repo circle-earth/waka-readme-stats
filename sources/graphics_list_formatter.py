@@ -59,6 +59,8 @@ def get_icon_url(name: str, category: str = "color") -> str:
         return f"https://icon-iota-neon.vercel.app/icon/ides/{name_lower}"
     elif category == "os":
         return f"https://icon-iota-neon.vercel.app/icon/os/{name_lower}"
+    elif category == "projects":
+        return f"https://icon-iota-neon.vercel.app/icon/projects/{name_lower}"
     elif category == "color" or category == "repos":
         return f"https://icon-iota-neon.vercel.app/color/{name_lower}?size=20"
     return f"https://icon-iota-neon.vercel.app/color/{name_lower}?size=20"
@@ -89,7 +91,17 @@ def make_list(data: List = None, names: List[str] = None, texts: List[str] = Non
     elif category == "repos":
          table_html += f'<th width="400" align="left">Language</th><th width="400" align="center">Repository</th><th width="400" align="center">Progress</th></tr>'
     else:
-         table_html += f'<th width="400" align="left">{"Language" if category == "color" else ("Editor" if category == "ides" else "OS")}</th><th width="400" align="center">{col2_name}</th><th width="400" align="center">Progress</th></tr>'
+         header_name = "Language"
+         if category == "color":
+             header_name = "Language"
+         elif category == "ides":
+             header_name = "Editor"
+         elif category == "os":
+             header_name = "OS"
+         elif category == "projects":
+             header_name = "Name"
+         
+         table_html += f'<th width="400" align="left">{header_name}</th><th width="400" align="center">{col2_name}</th><th width="400" align="center">Progress</th></tr>'
 
     for n, t, p in top_data:
         # Determine bar parameters
@@ -99,7 +111,7 @@ def make_list(data: List = None, names: List[str] = None, texts: List[str] = Non
             
         # Determine name column HTML
         name_html = ""
-        if category in ["day_night", "day_of_week", "projects"]:
+        if category in ["day_night", "day_of_week"]:
             name_html = f"&nbsp;{n}"
         else:
             icon_url = get_icon_url(n, category)
@@ -114,7 +126,7 @@ def make_list(data: List = None, names: List[str] = None, texts: List[str] = Non
             
         
         row_html = f'<tr>'
-        if category in ["day_night", "day_of_week", "projects"]:
+        if category in ["day_night", "day_of_week"]:
             row_html += f'<td width="400" style="white-space: nowrap;">{name_html}</td>'
         elif category == "color" and n == "Python":
              row_html += f'<td width="400" style="white-space: nowrap;">{name_html}</td>'
