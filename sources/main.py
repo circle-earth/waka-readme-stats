@@ -47,12 +47,12 @@ async def get_waka_time_stats(repositories: Dict, commit_dates: Dict) -> str:
         no_activity = FM.t("No Activity Tracked This Week")
         
         stats += '<div align="center"><table>'
-        stats += f'<tr><th colspan="1" width="600" align="center"> 📊 {FM.t("This Week I Spend My Time On")} </th></tr>'
+        stats += f'<tr><th colspan="1" width="1200" align="center"> 📊 {FM.t("This Week I Spend My Time On")} </th></tr>'
 
         if EM.SHOW_TIMEZONE:
             DBM.i("Adding user timezone info...")
             time_zone = data["data"]["timezone"]
-            stats += f'<tr><th colspan="1" width="600" align="center"> 🕑︎ {FM.t("Timezone")}: {time_zone} </th></tr>'
+            stats += f'<tr><th colspan="1" width="1200" align="center"> 🕑︎ {FM.t("Timezone")}: {time_zone} </th></tr>'
             
         stats += '</table></div>\n\n'
 
