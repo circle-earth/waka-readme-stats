@@ -83,13 +83,13 @@ def make_list(data: List = None, names: List[str] = None, texts: List[str] = Non
     table_html = f'<div align="center"><table><tr><th colspan="3" align="center">{title}</th></tr><tr>'
     
     if category == "day_night":
-         table_html += f'<th width="200" align="left">Time of Day</th><th width="200" align="center">Commit Message</th><th width="400" align="center">Progress</th></tr>'
+         table_html += f'<th width="400" align="left">Time of Day</th><th width="400" align="center">Commit Message</th><th width="400" align="center">Progress</th></tr>'
     elif category == "day_of_week":
-         table_html += f'<th width="200" align="left">Day</th><th width="200" align="center">Commit Messages </th><th width="400" align="center">Progress</th></tr>'
+         table_html += f'<th width="400" align="left">Day</th><th width="400" align="center">Commit Messages </th><th width="400" align="center">Progress</th></tr>'
     elif category == "repos":
-         table_html += f'<th width="200" align="left">Language</th><th width="200" align="center">Repository</th><th width="400" align="center">Progress</th></tr>'
+         table_html += f'<th width="400" align="left">Language</th><th width="400" align="center">Repository</th><th width="400" align="center">Progress</th></tr>'
     else:
-         table_html += f'<th width="200" align="left">{"Language" if category == "color" else ("Editor" if category == "ides" else "OS")}</th><th width="200" align="center">{col2_name}</th><th width="400" align="center">Progress</th></tr>'
+         table_html += f'<th width="400" align="left">{"Language" if category == "color" else ("Editor" if category == "ides" else "OS")}</th><th width="400" align="center">{col2_name}</th><th width="400" align="center">Progress</th></tr>'
 
     for n, t, p in top_data:
         # Determine bar parameters
@@ -115,15 +115,15 @@ def make_list(data: List = None, names: List[str] = None, texts: List[str] = Non
         
         row_html = f'<tr>'
         if category in ["day_night", "day_of_week", "projects"]:
-            row_html += f'<td width="200" style="white-space: nowrap;">{name_html}</td>'
+            row_html += f'<td width="400" style="white-space: nowrap;">{name_html}</td>'
         elif category == "color" and n == "Python":
-             row_html += f'<td width="200" style="white-space: nowrap;">{name_html}</td>'
+             row_html += f'<td width="400" style="white-space: nowrap;">{name_html}</td>'
         elif category == "ides" and n == "PyCharm":
-             row_html += f'<td width="200" style="white-space: nowrap;"><img src="{get_icon_url(n, category)}" alt="{n}" width="30" valign="middle"/>&nbsp;{n}</td>'
+             row_html += f'<td width="400" style="white-space: nowrap;"><img src="{get_icon_url(n, category)}" alt="{n}" width="30" valign="middle"/>&nbsp;{n}</td>'
         else:
-             row_html += f'<td width="200">{name_html}</td>'
+             row_html += f'<td width="400">{name_html}</td>'
 
-        row_html += f'<td width="200" align="center">{format_time_spent(t)}</td>'
+        row_html += f'<td width="400" align="center">{format_time_spent(t)}</td>'
         row_html += f'<td width="400" align="center"><img src="{img_url}" alt="{p}%" width="400" height="40"></td></tr>'
         
         table_html += row_html
