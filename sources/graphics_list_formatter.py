@@ -56,11 +56,11 @@ def get_icon_url(name: str, category: str = "color") -> str:
         name_lower = "vscode"
         
     if category == "ides":
-        return f"https://icon-iota-neon.vercel.app/icon/ides/{name_lower}"
+        return f"https://icon-iota-neon.vercel.app/icon/ides/{name_lower}?size=20"
     elif category == "os":
-        return f"https://icon-iota-neon.vercel.app/icon/os/{name_lower}"
+        return f"https://icon-iota-neon.vercel.app/icon/os/{name_lower}?size=20"
     elif category == "projects":
-        return "https://icon-iota-neon.vercel.app/icon/project/branch?color=58A6FF"
+        return "https://icon-iota-neon.vercel.app/icon/project/branch?color=58A6FF&size=20"
     elif category == "color" or category == "repos":
         return f"https://icon-iota-neon.vercel.app/color/{name_lower}?size=20"
     return f"https://icon-iota-neon.vercel.app/color/{name_lower}?size=20"
@@ -115,14 +115,11 @@ def make_list(data: List = None, names: List[str] = None, texts: List[str] = Non
             name_html = f"&nbsp;{n}"
         else:
             icon_url = get_icon_url(n, category)
-            valign = ' valign="middle"' if category != "color" else ''
-            width_attr = ' width="20"' if category == "projects" else (' width="30"' if category in ["ides", "os"] else '')
+            valign = ' valign="middle"'
             alt_attr = f' alt="{n}"'
-            name_html = f'<img src="{icon_url}"{width_attr}{alt_attr}{valign}/> &nbsp;{n}'
+            name_html = f'<img src="{icon_url}"{alt_attr}{valign}/> &nbsp;{n}'
             if category == "color":
-                 name_html = f'<img src="{icon_url}"{alt_attr}/>&nbsp;{n}'
-                 if n != "Python":
-                      name_html = f'<img src="{icon_url}"{alt_attr} valign="middle"/> {n}'
+                 name_html = f'<img src="{icon_url}"{alt_attr} valign="middle"/> &nbsp;{n}'
             
         
         row_html = f'<tr>'
