@@ -255,11 +255,11 @@ async def get_stats() -> str:
     if EM.SHOW_SHORT_INFO:
         stats += f"{await get_short_github_info()}\n\n"
 
-    stats += f"{await get_waka_time_stats(repositories, commit_data)}\n\n"
+    stats += f"{await get_waka_time_stats(repositories, commit_data)}"
 
     if EM.SHOW_LANGUAGE_PER_REPO:
         DBM.i("Adding language per repository info...")
-        stats += f"{make_language_per_repo_list(repositories)}\n\n"
+        stats += f"\n\n{make_language_per_repo_list(repositories)}\n\n"
 
     if EM.SHOW_LOC_CHART:
         await create_loc_graph(yearly_data, GRAPH_PATH)
