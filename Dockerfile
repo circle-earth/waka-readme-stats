@@ -12,4 +12,5 @@ RUN git config --global user.name "readme-bot"
 RUN git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
 ADD sources/* /waka-readme-stats/
-ENTRYPOINT cd /waka-readme-stats/ && python3 main.py
+WORKDIR /waka-readme-stats
+ENTRYPOINT ["python3", "main.py"]
