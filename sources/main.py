@@ -63,7 +63,7 @@ async def get_waka_time_stats(repositories: Dict, commit_dates: Dict) -> str:
 
         if EM.SHOW_EDITORS:
             DBM.i("Adding user editors info...")
-            edit_list = no_activity if len(data["data"]["editors"]) == 0 else make_list(data["data"]["editors"], title="🔥 IDE's ", category="ides")
+            edit_list = no_activity if len(data["data"]["editors"]) == 0 else make_list(data["data"]["editors"], title="👨‍💻 IDE's ", category="ides")
             stats += f"{edit_list}\n\n"
 
         if EM.SHOW_PROJECTS:
