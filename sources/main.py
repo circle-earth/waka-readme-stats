@@ -41,7 +41,7 @@ async def get_waka_time_stats(repositories: Dict, commit_dates: Dict) -> str:
         return stats
     if EM.SHOW_COMMIT or EM.SHOW_DAYS_OF_WEEK:  # if any on flag is turned on then we need to calculate the data and print accordingly
         DBM.i("Adding user commit day time info...")
-        stats += f"{await make_commit_day_time_list(data['data']['timezone'], repositories, commit_dates)}\n\n"
+        stats += f"{await make_commit_day_time_list(data['data']['timezone'], repositories, commit_dates)}"
 
     if EM.SHOW_TIMEZONE or EM.SHOW_LANGUAGE or EM.SHOW_EDITORS or EM.SHOW_PROJECTS or EM.SHOW_OS:
         no_activity = FM.t("No Activity Tracked This Week")
@@ -76,7 +76,8 @@ async def get_waka_time_stats(repositories: Dict, commit_dates: Dict) -> str:
             os_list = no_activity if len(data["data"]["operating_systems"]) == 0 else make_list(data["data"]["operating_systems"], title=f"💻 {FM.t('operating system')}", category="os")
             stats += f"{os_list}\n\n"
 
-        stats = f"{stats[:-1]}\n\n"
+        # The previous lists already append \n\n if they are added.
+        pass
 
     DBM.g("WakaTime stats added!")
     return stats
@@ -135,7 +136,7 @@ async def get_short_github_info() -> str:
     priv_label = f"&nbsp;🔑&nbsp;{label_raw.replace(' ', '&nbsp;')}"
     stats += f'<tr><td width="400" align="left" style="white-space: nowrap;">{priv_label}</td><td width="400" align="center">{private_repo}</td></tr>'
 
-    stats += "</table></div>\n\n"
+    stats += "</table></div>"
     DBM.g("Short GitHub info added!")
     return stats
 
@@ -251,11 +252,10 @@ async def get_stats() -> str:
             
         if badges:
             stats += f"<div align=\"center\">\n\n{badges}\n</div>\n\n"
-
     if EM.SHOW_SHORT_INFO:
-        stats += await get_short_github_info()
+        stats += f"{await get_short_github_info()}\n\n"
 
-    stats += await get_waka_time_stats(repositories, commit_data)
+    stats += f"{await get_waka_time_stats(repositories, commit_data)}\n\n"
 
     if EM.SHOW_LANGUAGE_PER_REPO:
         DBM.i("Adding language per repository info...")

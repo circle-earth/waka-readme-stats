@@ -179,7 +179,7 @@ async def make_commit_day_time_list(time_zone: str, repositories: Dict, commit_d
         title = FM.t("I am an Early") if sum(day_times[0:2]) >= sum(day_times[2:4]) else FM.t("I am a Night")
         title_str = f" {title} "
         
-        stats += f"\n{make_list(names=dt_names, texts=dt_texts, percents=dt_percents, top_num=7, sort=False, title=title_str, category='day_night', col2_name='Commit Message')}\n\n"
+        stats += f"{make_list(names=dt_names, texts=dt_texts, percents=dt_percents, top_num=7, sort=False, title=title_str, category='day_night', col2_name='Commit Message')}\n\n"
 
     if EM.SHOW_DAYS_OF_WEEK:
         wd_names = [FM.t(week_day) for week_day in WEEK_DAY_NAMES]
@@ -187,7 +187,7 @@ async def make_commit_day_time_list(time_zone: str, repositories: Dict, commit_d
         wd_percents = [0 if sum_week == 0 else round((week_day / sum_week) * 100, 2) for week_day in week_days]
         title_raw = FM.t('I am Most Productive on').replace('%s', '')
         title = f"📅 {title_raw.strip()} {wd_names[wd_percents.index(max(wd_percents))]}"
-        stats += f"\n{make_list(names=wd_names, texts=wd_texts, percents=wd_percents, top_num=7, sort=False, title=title, category='day_of_week')}\n\n"
+        stats += f"{make_list(names=wd_names, texts=wd_texts, percents=wd_percents, top_num=7, sort=False, title=title, category='day_of_week')}\n\n"
 
     return stats
 
@@ -216,4 +216,4 @@ def make_language_per_repo_list(repositories: Dict) -> str:
         title = f" 📝 {title_raw.strip()} {top_language} "
     else:
         title = ""
-    return f"{make_list(names=names, texts=texts, percents=percents, title=title, category='repos', col2_name='Repository')}\n\n"
+    return make_list(names=names, texts=texts, percents=percents, title=title, category='repos', col2_name='Repository')
