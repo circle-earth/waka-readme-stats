@@ -56,14 +56,14 @@ def get_icon_url(name: str, category: str = "color") -> str:
         name_lower = "vscode"
         
     if category == "ides":
-        return f"https://icon-iota-neon.vercel.app/icon/ides/{name_lower}?size=20"
+        return f"https://icon-mj.vercel.app/icon/ides/{name_lower}?size=20"
     elif category == "os":
-        return f"https://icon-iota-neon.vercel.app/icon/os/{name_lower}?size=20"
+        return f"https://icon-mj.vercel.app/icon/os/{name_lower}?size=20"
     elif category == "projects":
-        return "https://icon-iota-neon.vercel.app/icon/project/branch?color=58A6FF&size=20"
+        return "https://icon-mj.vercel.app/icon/project/branch?color=58A6FF&size=20"
     elif category == "color" or category == "repos":
-        return f"https://icon-iota-neon.vercel.app/color/{name_lower}?size=20"
-    return f"https://icon-iota-neon.vercel.app/color/{name_lower}?size=20"
+        return f"https://icon-mj.vercel.app/color/{name_lower}?size=20"
+    return f"https://icon-mj.vercel.app/color/{name_lower}?size=20"
 
 def format_time_spent(text: str) -> str:
     """Helper to replace spaces with &nbsp; for time spent."""
