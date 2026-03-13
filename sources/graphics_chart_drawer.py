@@ -1,3 +1,4 @@
+from os import makedirs
 from typing import Dict
 import numpy as np
 
@@ -30,6 +31,9 @@ async def create_loc_graph(yearly_data: Dict, save_path: str):
     :param yearly_data: GitHub user yearly data.
     :param save_path: Path to save the graph file.
     """
+    # Ensure directory exists
+    makedirs(FM.ASSETS_DIR, exist_ok=True)
+    
     colors_data = await DM.get_remote_yaml("linguist")
     if colors_data is None:
         colors_data = dict()
@@ -49,19 +53,27 @@ async def create_loc_graph(yearly_data: Dict, save_path: str):
             raw_indices.append(data_points_count)
             data_points_count += 1
             
-    if data_points_count < 2:
-        return # Not enough data to draw
+    # Initial setup for plotting
+    plt.style.use('dark_background')
+    fig, ax = plt.subplots(figsize=(10, 5), dpi=100)
+    fig.patch.set_facecolor('#0d1117')
+    ax.set_facecolor('#0d1117')
+
+    if data_points_count == 0:
+        # Save empty chart if no data
+        plt.tight_layout()
+        plt.savefig(save_path, transparent=True, bbox_inches='tight')
+        plt.close(fig)
+        return
 
     x_indices = np.array(raw_indices)
     
     actual_y_arrays = {}
-    # We need to collect points for all languages that appeared in ANY quarter
     all_langs = set()
     for y in sorted_years:
         for q in yearly_data[y]:
             all_langs.update(yearly_data[y][q].keys())
 
-    # Filter for top languages overall to keep chart clean
     lang_totals = {lang: 0 for lang in all_langs}
     for y in sorted_years:
         for q in yearly_data[y]:
@@ -78,31 +90,36 @@ async def create_loc_graph(yearly_data: Dict, save_path: str):
             if lang in yearly_data[y][q_idx]:
                 actual_y_arrays[lang][idx] = yearly_data[y][q_idx][lang]["add"]
 
-    # Interpolate for more points to make smoothing look better
-    x_interp = np.linspace(0, data_points_count - 1, data_points_count * 10)
-    y_smoothed_list = []
-    lang_names = []
-    lang_colors = []
+    if data_points_count < 2:
+        # Fallback to bar chart for single data point
+        bottom = 0
+        lang_names = []
+        lang_colors = []
+        for lang in top_langs:
+            val = actual_y_arrays[lang][0]
+            color = colors_data.get(lang, {}).get("color", "#888888")
+            ax.bar(0, val, bottom=bottom, color=color, label=lang, alpha=0.85)
+            bottom += val
+            lang_names.append(lang)
+            lang_colors.append(color)
+        x_interp = [0]
+    else:
+        # Interpolate and smooth for area chart
+        x_interp = np.linspace(0, data_points_count - 1, data_points_count * 10)
+        y_smoothed_list = []
+        lang_names = []
+        lang_colors = []
 
-    for lang in top_langs:
-        y_values = actual_y_arrays[lang]
-        # Linear interpolation first
-        y_interp = np.interp(x_interp, x_indices, y_values)
-        # Then moving average smoothing
-        y_smooth = smooth_data(y_interp, window_size=min(15, len(y_interp)//2))
-        y_smoothed_list.append(np.maximum(0, y_smooth))
-        lang_names.append(lang)
-        lang_colors.append(colors_data.get(lang, {}).get("color", "#888888"))
+        for lang in top_langs:
+            y_values = actual_y_arrays[lang]
+            y_interp = np.interp(x_interp, x_indices, y_values)
+            y_smooth = smooth_data(y_interp, window_size=min(15, len(y_interp)//2))
+            y_smoothed_list.append(np.maximum(0, y_smooth))
+            lang_names.append(lang)
+            lang_colors.append(colors_data.get(lang, {}).get("color", "#888888"))
 
-    # Plotting
-    plt.style.use('dark_background')
-    fig, ax = plt.subplots(figsize=(10, 5), dpi=100)
-    fig.patch.set_facecolor('#0d1117')
-    ax.set_facecolor('#0d1117')
-
-    # Stackplot for area chart
-    if y_smoothed_list:
-        ax.stackplot(x_interp, *y_smoothed_list, labels=lang_names, colors=lang_colors, alpha=0.85, edgecolor='none')
+        if y_smoothed_list:
+            ax.stackplot(x_interp, *y_smoothed_list, labels=lang_names, colors=lang_colors, alpha=0.85, edgecolor='none')
 
     # Styling
     ax.spines['top'].set_visible(False)
@@ -118,7 +135,6 @@ async def create_loc_graph(yearly_data: Dict, save_path: str):
     
     ax.grid(True, linestyle='-', alpha=0.05, color='#ffffff')
     
-    # Custom Legend
     if lang_names:
         legend = ax.legend(loc='upper left', bbox_to_anchor=(1, 1), frameon=False, fontsize=9)
         plt.setp(legend.get_texts(), color='#c9d1d9')
