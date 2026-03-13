@@ -98,10 +98,11 @@ async def create_loc_graph(yearly_data: Dict, save_path: str):
         for lang in top_langs:
             val = actual_y_arrays[lang][0]
             color = colors_data.get(lang, {}).get("color", "#888888")
-            ax.bar(0, val, bottom=bottom, color=color, label=lang, alpha=0.85)
+            ax.bar(0, val, width=0.3, bottom=bottom, color=color, label=lang, alpha=0.9, edgecolor='none')
             bottom += val
             lang_names.append(lang)
             lang_colors.append(color)
+        ax.set_xlim(-0.5, 0.5)
         x_interp = [0]
     else:
         # Interpolate and smooth for area chart
