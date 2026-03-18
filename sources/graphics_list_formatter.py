@@ -136,7 +136,7 @@ def make_list(data: List = None, names: List[str] = None, texts: List[str] = Non
              row_html += f'<td width="400" style="white-space: nowrap;">{name_html.replace(" &nbsp;"+n, "&nbsp;"+n_fixed).replace("&nbsp;"+n, "&nbsp;"+n_fixed)}</td>'
 
         row_html += f'<td width="400" align="center">{format_time_spent(t)}</td>'
-        row_html += f'<td width="400" align="center"><img src="{img_url}" alt="{p}%" width="200" height="30"></td></tr>'
+        row_html += f'<td width="400" align="center"><img src="{img_url}" alt="{p}%" width="100" height="20"></td></tr>'
         
         table_html += row_html
 
