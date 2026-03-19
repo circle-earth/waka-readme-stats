@@ -112,7 +112,7 @@ def make_list(data: List = None, names: List[str] = None, texts: List[str] = Non
         # Determine name column HTML
         name_html = ""
         if category in ["day_night", "day_of_week"]:
-            name_html = f"🔹&nbsp;{n}"
+            name_html = f"&nbsp;{n}"
         else:
             icon_url = get_icon_url(n, category)
             valign = ' valign="middle"'
