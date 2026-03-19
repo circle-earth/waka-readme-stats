@@ -127,7 +127,7 @@ def make_list(data: List = None, names: List[str] = None, texts: List[str] = Non
         n_fixed = n.replace(" ", "&nbsp;")
         
         if category in ["day_night", "day_of_week"]:
-            row_html += f'<td width="400" style="white-space: nowrap;">&nbsp;{n_fixed}</td>'
+            row_html += f'<td width="400" style="white-space: nowrap;">&nbsp;🔹{n_fixed}</td>'
         elif category == "color" and n == "Python":
              row_html += f'<td width="400" style="white-space: nowrap;">{name_html.replace(n, n_fixed)}</td>'
         elif category == "ides" and n == "PyCharm":
