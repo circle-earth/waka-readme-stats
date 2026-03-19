@@ -85,11 +85,11 @@ def make_list(data: List = None, names: List[str] = None, texts: List[str] = Non
     table_html = f'<div align="center"><table><tr><th colspan="3" align="center">{title}</th></tr><tr>'
     
     if category == "day_night":
-         table_html += f'<th width="400" align="left">Time of Day</th><th width="400" align="center">Commit Message</th><th width="400" align="center">Progress</th></tr>'
+         table_html += f'<th width="400" align="center">Time of Day</th><th width="400" align="center">Commit Message</th><th width="400" align="center">Progress</th></tr>'
     elif category == "day_of_week":
-         table_html += f'<th width="400" align="left">Day</th><th width="400" align="center">Commit Messages </th><th width="400" align="center">Progress</th></tr>'
+         table_html += f'<th width="400" align="center">Day</th><th width="400" align="center">Commit Messages </th><th width="400" align="center">Progress</th></tr>'
     elif category == "repos":
-         table_html += f'<th width="400" align="left">Language</th><th width="400" align="center">Repository</th><th width="400" align="center">Progress</th></tr>'
+         table_html += f'<th width="400" align="center">Language</th><th width="400" align="center">Repository</th><th width="400" align="center">Progress</th></tr>'
     else:
          header_name = "Language"
          if category == "color":
@@ -101,7 +101,7 @@ def make_list(data: List = None, names: List[str] = None, texts: List[str] = Non
          elif category == "projects":
              header_name = "Name"
          
-         table_html += f'<th width="400" align="left">{header_name}</th><th width="400" align="center">{col2_name}</th><th width="400" align="center">Progress</th></tr>'
+         table_html += f'<th width="400" align="center">{header_name}</th><th width="400" align="center">{col2_name}</th><th width="400" align="center">Progress</th></tr>'
 
     for n, t, p in top_data:
         # Determine bar parameters
